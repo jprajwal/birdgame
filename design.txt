@@ -1,0 +1,10 @@
+Animation infrastructure:
+1. Frame.
+2. Animation API.
+3. Objects to render (Renderable)
+
+Rendering process:
+1. Create a new frame with contents of the old frame.
+2. Apply animations to the objects in new frame.
+3. Replace old frame with new frame.
+4. Display the new frame.
