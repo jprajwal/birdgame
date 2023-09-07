@@ -15,7 +15,7 @@ func (f *Frame) AddRenderable(r rendering.Renderable) {
 }
 
 func (f *Frame) GetRenderables() []rendering.Renderable {
-	return f.objects
+	return f.Clone().objects
 }
 
 func (f *Frame) Clone() *Frame {

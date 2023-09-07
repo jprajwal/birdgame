@@ -16,5 +16,4 @@ func main() {
 	if err := app.SetRoot(textView, true).Run(); err != nil {
 		panic(err)
 	}
-
 }
