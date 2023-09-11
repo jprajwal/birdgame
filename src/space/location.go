@@ -4,6 +4,10 @@ type Location struct {
 	x, y Dimension2D
 }
 
+func NewLocation(x, y Dimension2D) *Location {
+	return &Location{ x: x, y: y }
+}
+
 func (l *Location) getX() Dimension2D {
 	return l.x
 }

@@ -1,13 +1,13 @@
 package space
 
 type Space struct {
-	field Field2D
+	field   Field2D
 	objects []Object2D
 }
 
 func NewSpace(field Field2D, x, y Dimension2D) *Space {
-	return &Space {
-		field: field,
+	return &Space{
+		field:   field,
 		objects: make([]Object2D, 0),
 	}
 }
@@ -17,6 +17,10 @@ func (s *Space) GetMatterAt(x Dimension2D, y Dimension2D) Cell2D {
 		return NewCell("")
 	}
 	return s.field.GetMatterAt(x, y)
+}
+
+func (s *Space) SetMatterAt(x Dimension2D, y Dimension2D, c Cell2D) {
+	s.field.SetMatterAt(x, y, c)
 }
 
 func (s *Space) GetRowCount() Dimension2D {
@@ -39,9 +43,21 @@ func (s *Space) IterateObjects2D() Object2DIterator {
 	return nil
 }
 
+func (s *Space) RenderObjects2D() {
+	iter := s.IterateObjects2D()
+
+	for object := iter.Next(); object != nil; object = iter.Next() {
+		CopyFieldToField(
+			object,  // Location2D
+			object,  // Field2D
+			s.field, // Field2D
+		)
+	}
+}
+
 type ObjectIterator struct {
 	space *Space
-	i int
+	i     int
 }
 
 func (o *ObjectIterator) Next() Object2D {
@@ -51,4 +67,3 @@ func (o *ObjectIterator) Next() Object2D {
 	}
 	return o.space.objects[o.i]
 }
-
