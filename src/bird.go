@@ -3,11 +3,12 @@ package main
 var BIRD = [][]rune{{'_', '_', '\\', '_', ','}}
 
 type Bird struct {
-	obj BasicObject
+	obj BasicAnimatableObject
+	vv  MetrePerSecond
 }
 
 func NewBird(x, y int) *Bird {
-	return &Bird{obj: *NewBasicObject(copy2DSlice(BIRD), x, y)}
+	return &Bird{obj: *NewBasicAnimatableObject(NewBasicObject(copy2DSlice(BIRD), x, y))}
 }
 
 func (b *Bird) GetPositionX() int {
@@ -31,5 +32,21 @@ func (b *Bird) Draw(f Field) {
 }
 
 func (b *Bird) OnSpaceKeyPressed() {
-	b.obj.SetPositionX(b.obj.GetPositionX() - 1)
+	b.vv = MetrePerSecond(BIRD_JUMP_VELOCITY)
+}
+
+func (b *Bird) GetVerticalVelocity() MetrePerSecond {
+	return b.vv
+}
+
+func (b *Bird) SetVerticalVelocity(v MetrePerSecond) {
+	b.vv = v
+}
+
+func (b *Bird) Animate(f Field) {
+	b.obj.Animate(f)
+}
+
+func (b *Bird) AddAnimation(animation Animatable) {
+	b.obj.AddAnimation(animation)
 }

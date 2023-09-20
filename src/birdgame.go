@@ -10,12 +10,14 @@ func main() {
 	gameView.SetChangedFunc(func() { go app.Draw() })
 
 	bird := NewBird(10, 10)
+	gravityAnimation := NewGravityAnimation(bird)
+	bird.AddAnimation(gravityAnimation)
 	gameView.AddObject(bird)
 
 	spaceKeyEh := NewSpaceKeyEventHandler()
 	spaceKeyEh.AddListener(bird)
 	gameView.RegisterSpaceKeyEventHandler(spaceKeyEh)
-	gameView.Render()
+	go gameView.RunRenderLoop(60)
 
 	if err := app.SetRoot(gameView, true).Run(); err != nil {
 		panic(err)

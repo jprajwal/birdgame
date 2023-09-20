@@ -27,10 +27,6 @@ type Positionable interface {
 	SetPositionY(int)
 }
 
-type Renderable interface {
-	GetData() [][]rune
-}
-
 type Drawable interface {
 	Draw(Field)
 }
@@ -48,3 +44,25 @@ type EventHandler interface {
 	Notify()
 }
 
+type Metre float64
+type MetrePerSecond float64
+
+type HasVerticalVelocity interface {
+	GetVerticalVelocity() MetrePerSecond
+	SetVerticalVelocity(MetrePerSecond)
+}
+
+type Animatable interface {
+	Animate(Field)
+}
+
+type AnimatableObject interface {
+	Object
+	Animatable
+	AddAnimation(Animatable)
+}
+
+type ObjectWithVerticalVelocity interface {
+	Object
+	HasVerticalVelocity
+}

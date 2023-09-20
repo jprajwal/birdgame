@@ -1,27 +1,31 @@
 package main
 
 import (
+	"sync"
+	"time"
+
 	"github.com/gdamore/tcell/v2"
 	"github.com/rivo/tview"
 )
 
 type GameView struct {
-	width int
-	height int
-	data *BasicField
+	width           int
+	height          int
+	data            *BasicField
 	changedCallback func()
 	spaceKeyEh      EventHandler
-	objects         []Object
+	objects         []AnimatableObject
+	rwlock          sync.RWMutex
 }
 
 func NewGameView(x, y int) *GameView {
 	return &GameView{
-		data: NewBasicField(x, y),
-		objects: make([]Object, 0),
+		data:    NewBasicField(x, y),
+		objects: make([]AnimatableObject, 0),
 	}
 }
 
-func (b *GameView) AddObject(obj Object) {
+func (b *GameView) AddObject(obj AnimatableObject) {
 	b.objects = append(b.objects, obj)
 }
 
@@ -31,22 +35,38 @@ func (b *GameView) RegisterSpaceKeyEventHandler(eh EventHandler) {
 
 func (b *GameView) Render() {
 	newField := NewBasicField(b.width, b.height)
-	
+
+	b.rwlock.RLock()
 	for i := 0; i < len(b.objects); i++ {
 		object := b.objects[i]
+		object.Animate(newField)
 		object.Draw(newField)
 	}
+	b.rwlock.RUnlock()
 
+	b.rwlock.Lock()
 	b.data = newField
+	b.rwlock.Unlock()
+
+	b.changedCallback()
+}
+
+func (b *GameView) RunRenderLoop(fps int) {
+	for {
+		interval := 1 / fps
+		time.Sleep(time.Duration(interval) * time.Second)
+		b.Render()
+	}
 }
 
 func (b *GameView) Draw(screen tcell.Screen) {
-	b.Render()
+	b.rwlock.RLock()
 	for i := 0; i < b.width; i++ {
 		for j := 0; j < b.height; j++ {
 			screen.SetContent(j, i, b.data.GetContent(i, j).Get(), nil, tcell.StyleDefault)
 		}
 	}
+	b.rwlock.RUnlock()
 }
 
 func (b *GameView) GetRect() (int, int, int, int) {
@@ -69,7 +89,6 @@ func (b *GameView) InputHandler() func(event *tcell.EventKey, setFocus func(p tv
 		switch event.Rune() {
 		case ' ':
 			b.spaceKeyEh.Notify()
-			b.changedCallback()
 		default:
 		}
 	}
