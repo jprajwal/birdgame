@@ -15,7 +15,7 @@ func NewGravityAnimation(object ObjectWithVerticalVelocity) *GravityAnimation {
 func (ga *GravityAnimation) Animate(_ Field) {
 	elapsed := time.Since(ga.lastTime)
 	ga.lastTime = ga.lastTime.Add(elapsed)
-	UpdateGravity(elapsed, ga.object)
+	ga.object.SetVerticalVelocity(UpdateGravity(elapsed, ga.object.GetVerticalVelocity()))
 	ga.distance += GetDistanceTravelled(elapsed, ga.object.GetVerticalVelocity())
 	scaledDistance := ScaleDistance(ga.distance)
 	if scaledDistance != 0 {

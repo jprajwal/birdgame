@@ -2,8 +2,8 @@ package main
 
 import "time"
 
-func UpdateGravity(interval time.Duration, object HasVerticalVelocity) {
-	object.SetVerticalVelocity(object.GetVerticalVelocity() - MetrePerSecond(G*interval.Seconds()))
+func UpdateGravity(interval time.Duration, velocity MetrePerSecond) MetrePerSecond {
+	return velocity - MetrePerSecond(G*interval.Seconds())
 }
 
 func GetDistanceTravelled(interval time.Duration, velocity MetrePerSecond) Metre {
