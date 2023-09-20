@@ -6,14 +6,20 @@ import (
 
 func main() {
 	app := tview.NewApplication()
-	textView := tview.NewTextView().SetChangedFunc(func() {
-		app.Draw()
-	})
-	textView.SetTitle("Birdgame")
-	textView.SetBorder(true)
-	rt := NewGameRuntime()
-	go rt.Run(textView)
-	if err := app.SetRoot(textView, true).Run(); err != nil {
+	gameView := NewGameView(100, 100)
+	gameView.SetChangedFunc(func() { go app.Draw() })
+
+	bird := NewBird(10, 10)
+	gravityAnimation := NewGravityAnimation(bird)
+	bird.AddAnimation(gravityAnimation)
+	gameView.AddObject(bird)
+
+	spaceKeyEh := NewSpaceKeyEventHandler()
+	spaceKeyEh.AddListener(bird)
+	gameView.RegisterSpaceKeyEventHandler(spaceKeyEh)
+	go gameView.RunRenderLoop(60)
+
+	if err := app.SetRoot(gameView, true).Run(); err != nil {
 		panic(err)
 	}
 }
