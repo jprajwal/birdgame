@@ -18,6 +18,7 @@ func (ga *GravityAnimation) Animate(_ Field) {
 	ga.object.SetVerticalVelocity(UpdateGravity(elapsed, ga.object.GetVerticalVelocity()))
 	ga.distance += GetDistanceTravelled(elapsed, ga.object.GetVerticalVelocity())
 	scaledDistance := ScaleDistance(ga.distance)
+	LOG.Printf("vel: %v, dist: %v, sclDist: %v", ga.object.GetVerticalVelocity(), ga.distance, scaledDistance)
 	if scaledDistance != 0 {
 		ga.distance = ga.distance - Metre(scaledDistance)
 		ga.object.SetPositionX(ga.object.GetPositionX() - scaledDistance)

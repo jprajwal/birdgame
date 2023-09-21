@@ -5,6 +5,9 @@ import (
 )
 
 func main() {
+	InitLogger(true)
+	defer FiniLogger()
+
 	app := tview.NewApplication()
 	gameView := NewGameView(100, 100)
 	gameView.SetChangedFunc(func() { go app.Draw() })
