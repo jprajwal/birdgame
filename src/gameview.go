@@ -34,7 +34,7 @@ func (b *GameView) RegisterSpaceKeyEventHandler(eh EventHandler) {
 }
 
 func (b *GameView) Render() {
-	newField := NewBasicField(b.width, b.height)
+	newField := NewBasicField(b.height, b.width)
 
 	b.rwlock.RLock()
 	for i := 0; i < len(b.objects); i++ {
@@ -61,8 +61,8 @@ func (b *GameView) RunRenderLoop(fps int) {
 
 func (b *GameView) Draw(screen tcell.Screen) {
 	b.rwlock.RLock()
-	for i := 0; i < b.width; i++ {
-		for j := 0; j < b.height; j++ {
+	for i := 0; i < b.height; i++ {
+		for j := 0; j < b.width; j++ {
 			screen.SetContent(j, i, b.data.GetContent(i, j).Get(), nil, tcell.StyleDefault)
 		}
 	}
@@ -70,15 +70,19 @@ func (b *GameView) Draw(screen tcell.Screen) {
 }
 
 func (b *GameView) GetRect() (int, int, int, int) {
+	b.rwlock.RLock()
+	defer b.rwlock.RUnlock()
 	return 0, 0, b.width, b.height
 }
 
 func (b *GameView) SetRect(x, y, width, height int) {
+	b.rwlock.Lock()
 	old := b.data
-	b.data = NewBasicField(width, height)
+	b.data = NewBasicField(height, width)
 	b.data.CopyFieldAt(0, 0, old)
 	b.width = width
 	b.height = height
+	b.rwlock.Unlock()
 }
 
 func (b *GameView) InputHandler() func(event *tcell.EventKey, setFocus func(p tview.Primitive)) {

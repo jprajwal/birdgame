@@ -17,6 +17,12 @@ func main() {
 	bird.AddAnimation(gravityAnimation)
 	gameView.AddObject(bird)
 
+	gameView.AddObject(NewPillar(25, 20, 0, 20))
+	gameView.AddObject(NewPillar(25, 30, 0, 50))
+	gameView.AddObject(NewPillar(25, 25, 0, 80))
+	gameView.AddObject(NewPillar(25, 20, 0, 110))
+	gameView.AddObject(NewPillar(25, 20, 0, 140))
+
 	spaceKeyEh := NewSpaceKeyEventHandler()
 	spaceKeyEh.AddListener(bird)
 	gameView.RegisterSpaceKeyEventHandler(spaceKeyEh)
