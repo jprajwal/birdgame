@@ -34,7 +34,7 @@ func (b *GameView) RegisterSpaceKeyEventHandler(eh EventHandler) {
 }
 
 func (b *GameView) Render() {
-	newField := NewBasicField(b.height, b.width)
+	newField := NewBasicField(b.width, b.height)
 
 	b.rwlock.RLock()
 	for i := 0; i < len(b.objects); i++ {
@@ -77,8 +77,9 @@ func (b *GameView) GetRect() (int, int, int, int) {
 
 func (b *GameView) SetRect(x, y, width, height int) {
 	b.rwlock.Lock()
+	LOG.Printf("SetRect: width: %v, height: %v", width, height)
 	old := b.data
-	b.data = NewBasicField(height, width)
+	b.data = NewBasicField(width, height)
 	b.data.CopyFieldAt(0, 0, old)
 	b.width = width
 	b.height = height

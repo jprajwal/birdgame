@@ -66,3 +66,16 @@ type ObjectWithVerticalVelocity interface {
 	Object
 	HasVerticalVelocity
 }
+
+type Slidable interface {
+	Slide(int)
+}
+
+type PillarContainer interface {
+	GetLastPillarPosition() int
+	RegisterPillarGenerator(PillarGenerator)
+}
+
+type PillarGenerator interface {
+	Generate(Field, PillarContainer) Object
+}

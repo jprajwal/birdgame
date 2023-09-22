@@ -1,6 +1,5 @@
 package main
 
-
 type BasicObject struct {
 	data *BasicField
 	posX int
@@ -8,16 +7,16 @@ type BasicObject struct {
 }
 
 func NewBasicObject(data [][]rune, posX, posY int) *BasicObject {
-	width := len(data)
-	height := 0
-	for i := 0; i < width; i++ {
-		if len(data[i]) > height {
-			height = len(data[i])
+	height := len(data)
+	width := 0
+	for i := 0; i < height; i++ {
+		if len(data[i]) > width {
+			width = len(data[i])
 		}
 	}
 	field := NewBasicField(width, height)
-	for i := 0; i < field.Width(); i++ {
-		for j := 0; j < field.Height(); j++ {
+	for i := 0; i < field.Height(); i++ {
+		for j := 0; j < field.Width(); j++ {
 			if c := field.GetContent(i, j); c != nil {
 				c.Set(data[i][j])
 			}

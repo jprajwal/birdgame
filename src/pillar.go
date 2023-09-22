@@ -61,6 +61,7 @@ func (p *Pillar) drawPillar(data [][]rune, x int) {
 			i -= 1
 			continue
 		}
+		LOG.Printf("drawPillar: i = %v", i)
 		data[i][0] = '|'
 		data[i][PILLARWIDTH-1] = '|'
 		p.fillPillar(data, '#', i)
@@ -69,13 +70,14 @@ func (p *Pillar) drawPillar(data [][]rune, x int) {
 
 func (b *Pillar) Draw(f Field) {
 	fh := f.Height()
+	LOG.Printf("Pillar.Draw(): field height: %v, gapPosition: %v, gapSize: %v", fh, b.gapPosition, b.gapSize)
 	if b.gapSize >= fh {
 		return
 	}
 	if fh > b.ph || !b.drawn {
 		data := make2DSlice[rune](fh, PILLARWIDTH)
 		b.drawPillar(data, fh)
-		LOG.Printf("pillar position: (%v, %v), field size: (%v, %v)", b.obj.GetPositionX(), b.obj.GetPositionY(), f.Height(), f.Width())
+		LOG.Printf("pillar position: (%v, %v), field size: (%v, %v)", b.obj.GetPositionX(), b.obj.GetPositionY(), f.Width(), f.Height())
 		b.obj = *NewBasicObject(
 			data,
 			b.obj.GetPositionX(),
@@ -84,9 +86,6 @@ func (b *Pillar) Draw(f Field) {
 		b.ph = fh
 		b.drawn = true
 	}
+	LOG.Printf("pillar.basicObject data size: width: %v, height: %v", b.obj.data.width, b.obj.data.height)
 	b.obj.Draw(f)
 }
-
-func (p *Pillar) Animate(f Field) {}
-
-func (p *Pillar) AddAnimation(a Animatable) {}

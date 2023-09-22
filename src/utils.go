@@ -18,3 +18,7 @@ func copy2DSlice[T any](data [][]T) [][]T {
 	}
 	return toReturn
 }
+
+func RemoveFromSlice[T any](slice []T, i int) []T {
+	return append(slice[:i], slice[i+1:]...)
+}
