@@ -13,7 +13,8 @@ func main() {
 	gameView.SetChangedFunc(func() { go app.Draw() })
 
 	pillarContainer := NewBasicPillarContainer()
-	pillarGenerator := NewUniformPillarGenerator(30, 20)
+	// pillarGenerator := NewUniformPillarGenerator(30, 20)
+	pillarGenerator := NewRandomPillarGenerator(30, 90, 30, 20)
 	pillarContainer.RegisterPillarGenerator(pillarGenerator)
 	pillarContainer.AddAnimation(NewLeftSlidingAnimation(pillarContainer, MetrePerSecond(30)))
 	gameView.AddObject(pillarContainer)
